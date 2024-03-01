@@ -38,7 +38,7 @@ public class BitcoinPriceTrigger {
         info.put("Threshold", String.valueOf(price));
         info.put("PreviousThreshold", String.valueOf(btcStartPrice));
         info.put("PriceTrendDesired", String.valueOf(priceTrendDesired));
-        RegisterEvent.registerEventOnDB(Tables.CRYPTO.getTableName(), RegisterEvent.INSERT, info);
+        RegisterEvent.registerCryptoEventOnDB(Tables.CRYPTO.getTableName(), RegisterEvent.INSERT, info);
         fetch();
     }
 
@@ -101,7 +101,7 @@ public class BitcoinPriceTrigger {
     public static String stop(Map<String, String> info) {
         info.put("Type", "Trigger");
 
-        int affectedRows = RegisterEvent.registerEventOnDB(Tables.CRYPTO.getTableName(), RegisterEvent.DELETE, info);
+        int affectedRows = RegisterEvent.registerCryptoEventOnDB(Tables.CRYPTO.getTableName(), RegisterEvent.DELETE, info);
 
         if (affectedRows > 0) {
             executorService.shutdown();

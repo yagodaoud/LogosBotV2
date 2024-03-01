@@ -22,7 +22,7 @@ public class BitcoinScheduledAlert { //Bitcoin update at every candle close (12 
     public void start(Map<String, String> info) { //Getting the time from BotCommands parameter
         System.out.println(info);
         info.put("Type", "sAlert");
-        RegisterEvent.registerEventOnDB(Tables.CRYPTO.getTableName(), RegisterEvent.INSERT, info);
+        RegisterEvent.registerCryptoEventOnDB(Tables.CRYPTO.getTableName(), RegisterEvent.INSERT, info);
         fetch();
     }
 
@@ -78,7 +78,7 @@ public class BitcoinScheduledAlert { //Bitcoin update at every candle close (12 
         info.remove("UserId");
         info.put("Type", "sAlert");
 
-        int affectedRows = RegisterEvent.registerEventOnDB(Tables.CRYPTO.getTableName(), RegisterEvent.DELETE, info);
+        int affectedRows = RegisterEvent.registerCryptoEventOnDB(Tables.CRYPTO.getTableName(), RegisterEvent.DELETE, info);
 
         if (affectedRows > 0) {
             if (task != null) {

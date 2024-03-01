@@ -30,7 +30,7 @@ public class BitcoinPriceAlert {
         info.put("Type", "pAlert");
         info.put("Threshold", String.valueOf(percentage));
         info.put("PreviousThreshold", String.valueOf(lastPrice));
-        RegisterEvent.registerEventOnDB(Tables.CRYPTO.getTableName(), RegisterEvent.INSERT ,info);
+        RegisterEvent.registerCryptoEventOnDB(Tables.CRYPTO.getTableName(), RegisterEvent.INSERT ,info);
     }
     public double getBtcPrice() {
         return BitcoinPriceScheduler.getBtcPrice();
@@ -73,7 +73,7 @@ public class BitcoinPriceAlert {
     public String stop(Map<String, String> info) {
         info.put("Type", "pAlert");
 
-        int affectedRows = RegisterEvent.registerEventOnDB(Tables.CRYPTO.getTableName(), RegisterEvent.DELETE, info);
+        int affectedRows = RegisterEvent.registerCryptoEventOnDB(Tables.CRYPTO.getTableName(), RegisterEvent.DELETE, info);
 
         if (affectedRows > 0) {
             executorService.shutdown();

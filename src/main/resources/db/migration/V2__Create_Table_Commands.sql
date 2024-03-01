@@ -1,0 +1,11 @@
+CREATE TABLE commandsMonitor (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    UserName VARCHAR(255) NOT NULL,
+    UserId BIGINT NOT NULL,
+    GuildId BIGINT NOT NULL,
+    TextChannelId BIGINT NOT NULL,
+    DateAdded DATETIME NOT NULL,
+    Command VARCHAR(255) NOT NULL,
+    OptionName VARCHAR(255) NOT NULL,
+    OptionValue VARCHAR(255) NOT NULL
+);

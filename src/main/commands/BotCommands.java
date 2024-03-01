@@ -35,7 +35,8 @@ public class BotCommands extends ListenerAdapter {
         String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         AudioEventHandler audioEventHandler = new AudioEventHandler();
         Locale locale = Locale.US;
-
+        String optionName = event.getOptions().isEmpty() ? "" : event.getOptions().get(0).getName();
+        String optionValue = event.getOptions().isEmpty() ? "" : event.getOptions().get(0).getAsString();
         Map<String, String> info  = new HashMap<>() {{
             put("UserName", userName);
             put("UserId", userId);
@@ -44,6 +45,8 @@ public class BotCommands extends ListenerAdapter {
             put("DateAdded", now);
             put("Type", null);
         }};
+
+        CommandListenerDB.registerEventOnDB(command, optionName, optionValue, info);
 
         switch (command) {
             case "help" -> event.reply(HelpView.getHelpView()).queue();

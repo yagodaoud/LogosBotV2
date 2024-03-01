@@ -11,7 +11,39 @@ public class RegisterEvent {
     public static final String UPDATE = "UPDATE";
     public static final String DELETE = "DELETE";
 
-    public static int registerEventOnDB(String table, String type, Map<String, String> info) {
+    public static void registerEventOnDB(Map<String, String> info) {
+        Connection connector = MySQLConnector.getConnection();
+
+        String columns = " (UserName, UserId, GuildId, TextChannelId, DateAdded, Command, OptionName, OptionValue) ";
+
+        String sql =
+                "INSERT INTO commandsMonitor" +
+                        columns +
+                        "VALUES " +
+                        "(" +
+                        "'" + info.get("UserName") + "'" + "," +
+                        "'" + info.get("UserId") + "'" + "," +
+                        "'" + info.get("GuildId")  + "'" + "," +
+                        "'" + info.get("TextChannelId")  + "'" + "," +
+                        "'" + info.get("DateAdded")  + "'" + "," +
+                        "'" + info.get("Command") + "'" +  "," +
+                        "'" + info.get("OptionName") + "'" +  "," +
+                        "'" + info.get("OptionValue") + "'" +
+                        ")" +
+                        ";";
+
+        System.out.println(sql);
+
+        try {
+            PreparedStatement statement = connector.prepareStatement(sql);
+            statement.executeUpdate();
+            connector.close();
+            statement.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    public static int registerCryptoEventOnDB(String table, String type, Map<String, String> info) {
 
         Connection connector = MySQLConnector.getConnection();
 
