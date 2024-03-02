@@ -7,6 +7,6 @@ CREATE TABLE crypto_alert (
     DateAdded DATETIME NOT NULL,
     Type VARCHAR(50),
     Threshold VARCHAR(50),
-    PreviousThreshold VARCHAR(50),
+    PreviousThreshold DECIMAL(10, 5),
     PriceTrendDesired TINYINT
 );

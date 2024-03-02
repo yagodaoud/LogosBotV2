@@ -1,10 +1,16 @@
 package main.crypto;
 
+import main.DiscordBot;
+import main.db.EventData;
 import main.db.RegisterEvent;
+import main.db.SelectEvent;
 import main.db.Tables;
+import main.music.PlayerManager;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
 import java.text.DecimalFormat;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -20,6 +26,8 @@ public class BitcoinPriceAlert {
     private double lastPrice;
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     private final DecimalFormat priceFormatter = new DecimalFormat("#,##0.00");
+    private static BitcoinPriceAlert INSTANCE;
+
 
     public BitcoinPriceAlert() {}
     public BitcoinPriceAlert(double percentage, Map<String, String> info){
@@ -44,6 +52,36 @@ public class BitcoinPriceAlert {
         return ((currentPrice - lastPrice) / lastPrice) * 100;
     }
 
+    public static void fetch() {
+        String textChannelId;
+        TextChannel channel;
+        String threshold;
+        String previousThreshold;
+        String type;
+
+        JDA bot = DiscordBot.getInstance();
+        List<EventData> list = SelectEvent.getEvent(Tables.CRYPTO.getTableName());
+
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        for (EventData eventData : list) {
+            textChannelId = eventData.getTextChannelId();
+            threshold = eventData.getThreshold();
+            previousThreshold = eventData.getPreviousThreshold();
+            type = eventData.getType();
+            if (textChannelId != null && threshold != null && type.equals("pAlert")) {
+                channel = bot.getTextChannelById(textChannelId);
+                BitcoinPriceAlert bitcoinPriceAlert = BitcoinPriceAlert.getInstance();
+                bitcoinPriceAlert.startAlert(channel);
+                bitcoinPriceAlert.lastPrice =  Double.parseDouble(previousThreshold);
+                VARIATION_THRESHOLD = Double.parseDouble(threshold);
+            }
+        }
+    }
     public void startAlert(TextChannel channel) {
         executorService.scheduleAtFixedRate(() -> {
 
@@ -80,6 +118,13 @@ public class BitcoinPriceAlert {
             return "Bitcoin price alert disabled";
         }
         return "The command is not active";
+    }
+
+    public static BitcoinPriceAlert getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new BitcoinPriceAlert();
+        }
+        return INSTANCE;
     }
 }
 

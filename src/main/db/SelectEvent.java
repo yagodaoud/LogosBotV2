@@ -15,11 +15,10 @@ public class SelectEvent {
 
         String sql = "SELECT * FROM " + table + ";";
 
-        System.out.println(sql);
-
         try {
             PreparedStatement statement = connector.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
+
             while (resultSet.next()) {
                 String userName = resultSet.getString("UserName");
                 String userId = resultSet.getString("UserId");
@@ -28,10 +27,9 @@ public class SelectEvent {
                 String dateAdded = resultSet.getString("DateAdded");
                 String type = resultSet.getString("Type");
                 String threshold = resultSet.getString("Threshold");
-                String previousThreshold = resultSet.getString("PreviousThreshold");
                 String priceTrendDesired = resultSet.getString("PriceTrendDesired");
-
-                EventData eventData = new EventData(userName, userId,  guildId, textChannelId, dateAdded, type, threshold, previousThreshold,priceTrendDesired);
+                String previousThreshold = resultSet.getString("PreviousThreshold");
+                EventData eventData = new EventData(userName, userId,  guildId, textChannelId, dateAdded, type, threshold, previousThreshold, priceTrendDesired);
                 result.add(eventData);
             }
             resultSet.close();

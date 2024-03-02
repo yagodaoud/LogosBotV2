@@ -39,7 +39,7 @@ public class CryptoCommandsList {
                 commandData.addOptions(cryptoSymbolOption);
             }
 
-            if (entry.getKey().equals("bitcoin-price-start")) {
+            if (entry.getKey().equals("bitcoin-price-trigger-start")) {
                 OptionData cryptoSymbolOption = new OptionData(OptionType.STRING, "target-price", "Target price desired", true);
                 commandData.addOptions(cryptoSymbolOption);
             }

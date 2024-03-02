@@ -12,8 +12,7 @@ public class CommandListenerDB {
             info.put("OptionName", optionName);
             info.put("OptionValue", optionValue);
 
-        System.out.println(command);
-        info.forEach((key, value) -> System.out.println(key + " " + value));
+//        info.forEach((key, value) -> System.out.println(key + " " + value));
             RegisterEvent.registerEventOnDB(info);
         }
     }

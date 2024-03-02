@@ -4,6 +4,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 import main.commands.BotCommands;
 import main.commands.LoadCommands;
 
+import main.crypto.BitcoinPriceAlert;
 import main.crypto.BitcoinPriceTrigger;
 import main.crypto.BitcoinScheduledAlert;
 
@@ -46,7 +47,8 @@ public class DiscordBot {
        new DiscordBot();
        bot.getPresence().setActivity(Activity.listening("/help"));
        BitcoinScheduledAlert.fetch();
-        BitcoinPriceTrigger.fetch();
+       BitcoinPriceTrigger.fetch();
+       BitcoinPriceAlert.fetch();
     }
 
     public static JDA getInstance() {

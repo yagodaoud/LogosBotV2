@@ -12,7 +12,7 @@ public class EventData {
 
     private String previousThreshold;
 
-    public EventData(String userName, String userId, String guildId, String textChannelId, String dateAdded, String type, String threshold, String priceTrendDesired, String previousThreshold) {
+    public EventData(String userName, String userId, String guildId, String textChannelId, String dateAdded, String type, String threshold, String previousThreshold, String priceTrendDesired) {
         this.userName = userName;
         this.userId = userId;
         this.guildId = guildId;
@@ -68,8 +68,7 @@ public class EventData {
                 ", dateAdded='" + dateAdded + '\'' +
                 ", type='" + type + '\'' +
                 ", threshold='" + threshold + '\'' +
-                ", threshold='" + threshold + '\'' +
-                
+                ", previous_threshold='" + previousThreshold + '\'' +
                 '}';
     }
 }

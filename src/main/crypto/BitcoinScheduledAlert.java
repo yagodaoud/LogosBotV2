@@ -20,7 +20,6 @@ public class BitcoinScheduledAlert { //Bitcoin update at every candle close (12 
     private static final Timer timer = new Timer();
     private static TimerTask task;
     public void start(Map<String, String> info) { //Getting the time from BotCommands parameter
-        System.out.println(info);
         info.put("Type", "sAlert");
         RegisterEvent.registerCryptoEventOnDB(Tables.CRYPTO.getTableName(), RegisterEvent.INSERT, info);
         fetch();

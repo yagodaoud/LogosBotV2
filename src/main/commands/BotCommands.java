@@ -52,8 +52,11 @@ public class BotCommands extends ListenerAdapter {
             case "help" -> event.reply(HelpView.getHelpView()).queue();
             case "crypto-price" -> event.reply(CryptoPriceDiscord.getFormattedPrice(event.getOption("crypto-symbol").getAsString())).queue();
             case "bitcoin-alert-start" -> {
-                BitcoinPriceAlert bitcoinPriceAlert = new BitcoinPriceAlert(event.getOption("percentage").getAsDouble(), info);
+                double percentage = event.getOption("percentage").getAsDouble();
+                BitcoinPriceAlert bitcoinPriceAlert = new BitcoinPriceAlert(percentage, info);
                 bitcoinPriceAlert.startAlert(channel);
+                event.reply("Tracking Bitcoin price when its variation is greater than {percentage}").queue();
+
             }
             case "bitcoin-alert-stop" -> {
                 BitcoinPriceAlert alert = new BitcoinPriceAlert();

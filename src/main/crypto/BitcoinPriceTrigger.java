@@ -81,17 +81,14 @@ public class BitcoinPriceTrigger {
             if (targetPrice == priceNow) {
                 String message = String.format("Bitcoin has reached $%,.2f, now at $%,.2f <@%s>!", targetPrice, priceNow, id);
                 channel.sendMessage(message).queue();
-                System.out.println(message);
                 executorService.shutdown();
             } else if (priceNow > targetPrice && priceTrendDesired == 1) {
                 String message = String.format("Bitcoin has exceeded $%,.2f, now at $%,.2f <@%s>!", targetPrice, priceNow, id);
                 channel.sendMessage(message).queue();
-                System.out.println(message);
                 executorService.shutdown();
             } else if (priceNow < targetPrice && priceTrendDesired == 0) {
                 String message = String.format("Bitcoin has gone below $%,.2f, now at $%,.2f <@%s>!", targetPrice, priceNow, id);
                 channel.sendMessage(message).queue();
-                System.out.println(message);
                 executorService.shutdown();
             }
 
