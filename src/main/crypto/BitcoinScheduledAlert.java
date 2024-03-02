@@ -86,7 +86,7 @@ public class BitcoinScheduledAlert { //Bitcoin update at every candle close (12 
             }
             return "Disabled the daily closing price of Bitcoin on this channel";
         }
-        return "The command is not active";
+        return "The command is not active.";
     }
 }
 

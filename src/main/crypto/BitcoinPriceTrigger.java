@@ -21,7 +21,7 @@ public class BitcoinPriceTrigger {
 
     private static double targetPrice;
     private static int priceTrendDesired;  //1 for uptrend, 0 for downtrend
-    private static final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+    private static ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
     private final Locale locale = Locale.US;
 
 
@@ -75,6 +75,8 @@ public class BitcoinPriceTrigger {
 
     public static void setPriceForNotification(TextChannel channel, Double targetPrice, Double priceTrendDesired,  String id) {
         if (targetPrice == null) return;
+        executorService = Executors.newScheduledThreadPool(2);
+
         long ALERT_INTERVAL = 600;
         executorService.scheduleAtFixedRate(() -> {
             double priceNow = BitcoinPriceScheduler.getBtcPrice();
@@ -104,6 +106,6 @@ public class BitcoinPriceTrigger {
             executorService.shutdown();
             return "Bitcoin price tracker disabled";
         }
-        return "The command is not active";
+        return "The command is not active.";
     }
 }

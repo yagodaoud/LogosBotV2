@@ -24,7 +24,7 @@ public class BitcoinPriceAlert {
     private static final long ALERT_INTERVAL= 3600;
     private boolean alerted;
     private double lastPrice;
-    private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+    private ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
     private final DecimalFormat priceFormatter = new DecimalFormat("#,##0.00");
     private static BitcoinPriceAlert INSTANCE;
 
@@ -83,6 +83,8 @@ public class BitcoinPriceAlert {
         }
     }
     public void startAlert(TextChannel channel) {
+        executorService = Executors.newScheduledThreadPool(2);
+
         executorService.scheduleAtFixedRate(() -> {
 
             double currentPrice = getBtcPrice();
@@ -117,7 +119,7 @@ public class BitcoinPriceAlert {
             executorService.shutdown();
             return "Bitcoin price alert disabled";
         }
-        return "The command is not active";
+        return "The command is not active.";
     }
 
     public static BitcoinPriceAlert getInstance() {
