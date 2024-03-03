@@ -89,12 +89,6 @@ public class PlayerManager {
                             continue;
                         musicManager.scheduler.queue(track);
                     }
-
-                    String message = messageBuilder.toString();
-                    messageContainer.set(message);
-                } else {
-                    String message = messageBuilder.toString();
-                    messageContainer.set(message);
                 }
                 String message = messageBuilder.toString();
                 messageContainer.set(message);

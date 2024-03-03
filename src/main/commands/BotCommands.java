@@ -57,7 +57,6 @@ public class BotCommands extends ListenerAdapter {
                     BitcoinPriceAlert bitcoinPriceAlert = new BitcoinPriceAlert(percentage, info);
                     bitcoinPriceAlert.startAlert(channel);
                     event.reply("Tracking Bitcoin price when its variation is greater than " + percentage + "%!").queue();
-
                 }
                 case "bitcoin-alert-stop" -> {
                     BitcoinPriceAlert alert = new BitcoinPriceAlert();

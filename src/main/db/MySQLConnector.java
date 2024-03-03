@@ -1,12 +1,14 @@
 package main.db;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 import java.sql.*;
 public class MySQLConnector {
 
     public static Connection getConnection() {
-        final String dbConnection = "jdbc:mysql://localhost:3306/discordbot";
-        final String dbUser = "root";
-        final String dbPassword = "1234";
+        final String dbConnection = "jdbc:mysql://mysql-logos:3306/discordbot";
+        final String dbUser =  Dotenv.configure().load().get("DB_USER");
+        final String dbPassword = Dotenv.configure().load().get("DB_PASSWORD");
         Connection connection = null;
 
         try {
@@ -14,6 +16,7 @@ public class MySQLConnector {
             System.out.println("Successfully connected to the database");
         } catch (SQLException e) {
             System.out.println("Connection failed");
+            System.out.println(e.getMessage());
         }
 
         return connection;
