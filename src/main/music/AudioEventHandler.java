@@ -10,12 +10,18 @@ import net.dv8tion.jda.api.events.Event;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class AudioEventHandler {
 
     private Member member;
     private GuildVoiceState voiceState;
     private static boolean joined = false;
+    private static LocalDateTime lastVoiceCommandTime = LocalDateTime.now();
+    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     public void start(Member member, GuildVoiceState voiceState) {
         this.member = member;
@@ -139,6 +145,23 @@ public class AudioEventHandler {
             return true;
         } catch (Exception e){
             return false;
+        }
+    }
+
+    public void updateLastVoiceCommandTime(Guild guild) {
+        lastVoiceCommandTime = LocalDateTime.now();
+        this.VoiceChannelMonitor(guild);
+    }
+
+    public void VoiceChannelMonitor(Guild guild) {
+        scheduler.scheduleAtFixedRate(() -> isTimeToDisconnect(guild), 0, 1, TimeUnit.MINUTES);
+    }
+
+    private void isTimeToDisconnect(Guild guild) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        LocalDateTime disconnectTime = lastVoiceCommandTime.plusMinutes(10);
+        if (currentTime.isAfter(disconnectTime)) {
+            this.leaveVoiceChannel(guild, true);
         }
     }
 }

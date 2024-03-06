@@ -19,7 +19,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class BotCommands extends ListenerAdapter {
-    private static LocalDateTime lastVoiceCommandTime = LocalDateTime.now();
 
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
@@ -52,10 +51,7 @@ public class BotCommands extends ListenerAdapter {
 
         ArrayList<String> musicCommands = new ArrayList<>(Arrays.asList("play", "join", "leave", "skip", "stop", "resume", "clear", "shuffle", "loop", "now-playing", "queue"));
         if (musicCommands.contains(command)) {
-            updateLastVoiceCommandTime();
-            if (isTimeToDisconnect()) {
-                audioEventHandler.leaveVoiceChannel(guild, true);
-            }
+            audioEventHandler.updateLastVoiceCommandTime(guild);
         }
 
         try {
@@ -106,16 +102,6 @@ public class BotCommands extends ListenerAdapter {
             System.out.println(e.getMessage());
             event.reply("An error occurred.").queue();
         }
-    }
-
-    private static void updateLastVoiceCommandTime() {
-        lastVoiceCommandTime = LocalDateTime.now();
-    }
-
-    private static boolean isTimeToDisconnect() {
-        LocalDateTime currentTime = LocalDateTime.now();
-        LocalDateTime disconnectTime = lastVoiceCommandTime.plusMinutes(10);
-        return currentTime.isAfter(disconnectTime);
     }
 
     @Override
