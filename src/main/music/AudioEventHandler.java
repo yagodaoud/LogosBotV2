@@ -52,12 +52,15 @@ public class AudioEventHandler {
         joined = true;
     }
 
-    public String leaveVoiceChannel(Guild guild) {
+    public String leaveVoiceChannel(Guild guild, boolean inactive) {
         final AudioChannel connectedChannel = guild.getSelfMember().getVoiceState().getChannel();
 
         if (connectedChannel != null) {
             connectedChannel.getGuild().getAudioManager().closeAudioConnection();
             joined = false;
+            if (inactive) {
+                return "Left the channel due to inactivity";
+            }
             return "Left the voice channel.";
         }
 

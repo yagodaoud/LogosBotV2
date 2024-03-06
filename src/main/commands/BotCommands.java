@@ -19,9 +19,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class BotCommands extends ListenerAdapter {
+    private static LocalDateTime lastVoiceCommandTime = LocalDateTime.now();
 
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
+
         BitcoinScheduledAlert scheduledAlert = null;
         String command = event.getName();
         Member member = event.getMember();
@@ -47,6 +49,14 @@ public class BotCommands extends ListenerAdapter {
         }};
 
         CommandListenerDB.registerEventOnDB(command, optionName, optionValue, info);
+
+        ArrayList<String> musicCommands = new ArrayList<>(Arrays.asList("play", "join", "leave", "skip", "stop", "resume", "clear", "shuffle", "loop", "now-playing", "queue"));
+        if (musicCommands.contains(command)) {
+            updateLastVoiceCommandTime();
+            if (isTimeToDisconnect()) {
+                audioEventHandler.leaveVoiceChannel(guild, true);
+            }
+        }
 
         try {
             switch (command) {
@@ -82,7 +92,7 @@ public class BotCommands extends ListenerAdapter {
                     event.reply(audioEventHandler.handle(channel,  event.getOption("song_search_or_link").getAsString(), event)).queue();
                 }
                 case "join" -> event.reply(audioEventHandler.joinVoiceChannel(voiceState, guild, event)).queue();
-                case "leave" -> event.reply(audioEventHandler.leaveVoiceChannel(guild)).queue();
+                case "leave" -> event.reply(audioEventHandler.leaveVoiceChannel(guild, false)).queue();
                 case "skip" -> event.reply(audioEventHandler.skipTrack(guild)).queue();
                 case "stop" -> event.reply(audioEventHandler.stopTrack(guild)).queue();
                 case "resume" -> event.reply(audioEventHandler.resumeTrack(guild)).queue();
@@ -96,6 +106,16 @@ public class BotCommands extends ListenerAdapter {
             System.out.println(e.getMessage());
             event.reply("An error occurred.").queue();
         }
+    }
+
+    private static void updateLastVoiceCommandTime() {
+        lastVoiceCommandTime = LocalDateTime.now();
+    }
+
+    private static boolean isTimeToDisconnect() {
+        LocalDateTime currentTime = LocalDateTime.now();
+        LocalDateTime disconnectTime = lastVoiceCommandTime.plusMinutes(10);
+        return currentTime.isAfter(disconnectTime);
     }
 
     @Override
